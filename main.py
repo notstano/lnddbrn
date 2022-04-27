@@ -1,14 +1,10 @@
-import argparse
 import json
-
 from collections import Counter
-from google.oauth2 import service_account
-from google.cloud import storage
-from pathlib import Path
-from typing import List
 
 import matplotlib.pyplot as plt
 import streamlit as st
+from google.cloud import storage
+from google.oauth2 import service_account
 
 st.title("Land deeds")
 st.markdown('''
@@ -26,10 +22,9 @@ DEED_COUNTS = {'Common': 7308,
                'Epic': 149}
 DEED_TYPES = list(DEED_COUNTS.keys())
 
-parser = argparse.ArgumentParser(description='Track on-chain burns of Skybreach land deeds')
-parser.add_argument('--burn_exts_file', required=True,
-                    help="Path to a json file in GCP bucket with burn extrinsics saved at a previous step")
-args = parser.parse_args()
+# To be loaded from a bucket
+BURN_FILE = "lnddbrns.json"
+
 
 st.header('Land deed types')
 st.markdown(f'''
@@ -46,9 +41,6 @@ ax2.pie(DEED_COUNTS.values(), labels=DEED_COUNTS.keys(),
         autopct='%1.0f%%', startangle=90)
 ax2.axis('equal')
 st.pyplot(fig)
-
-
-BURN_FILE = args.burn_exts_file
 
 
 def load_extrinsics():

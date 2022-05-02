@@ -49,20 +49,23 @@ def filter_rmrk2_burn(extrinsic: dict):
     if not params or not params['value']:
         return False
 
-    values = [v for v in params['value']
-              if v['call_index'] == '0001'
-              and v['call_module'] == 'System'
-              and v['call_name'] == 'remark']
+    calls = params['value']
 
-    if len(values) != 2:
-        # our target extrinsics only have 2 values (calls) - one for the RMRK::BURN remark and one for the the burn memo
+    # our target extrinsics have 2 values (calls) - one for the RMRK::BURN remark and one for the burn memo
+    if len(calls) != 2:
         return False
 
-    rmrk_call = values[0]
-    if 'RMRK::BURN::2' not in rmrk_call['params'][0]['value']:
+    # both are System.remark
+    if not all(c['call_module'] == 'System'
+               and c['call_name'] == 'remark'
+               for c in calls):
         return False
 
-    if 'KANCHAMP' not in rmrk_call['params'][0]['value']:
+    rmrk_action = calls[0]['params'][0]['value']
+    if not rmrk_action.startswith('RMRK::BURN::2'):
+        return False
+
+    if 'KANCHAMP' not in rmrk_action:
         return False
 
     return True

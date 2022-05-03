@@ -37,6 +37,7 @@ class Burn:
     extrinsic_id: str
     rmrk_call: str
     burn_memo: str
+    extrinsic: dict
 
 
 def load_batch_all(db: SubscrapeDB):
@@ -77,7 +78,7 @@ def transform_extrinsic(extrinsic: dict):
     rmrk_call = values[0]['params'][0]['value']
     burn_memo = values[1]['params'][0]['value']
 
-    return Burn(extrinsic['extrinsic_index'], rmrk_call, burn_memo)
+    return Burn(extrinsic['extrinsic_index'], rmrk_call, burn_memo, extrinsic)
 
 
 def main():

@@ -98,6 +98,7 @@ def load_extrinsics():
 burned = load_extrinsics()
 burned_by_type = Counter([item['rmrk_call'].split('-')[-2]
                           for item in burned])
+burned_by_type.pop('LNDDEED') #TODO Take car of this later! It's probably the team's deeds
 
 st.header("Burned Deeds")
 st.markdown(f'''
